@@ -22,6 +22,7 @@ ingredients_list = st.multiselect('Choose up to 5 ingrdients:', data['name'], ma
 if ingredients_list: #is not null:
     ingredients_string = ''
     for fruit_chosen in ingredients_list:
+        ingredients_string += fruit_chosen + ' '
         st.subheader(fruit_chosen + ' Nutrition Information')
         urlstring = 'my.smoothiefroot.com/api/fruit/' + fruit_chosen
         encoded_web_address = 'https://' + urllib.parse.quote(urlstring)
