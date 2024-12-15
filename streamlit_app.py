@@ -43,11 +43,9 @@ if ingredients_list: #is not null:
                 st.dataframe(transposed_df,width=w,hide_index=True)
         else:
             st.write('No nutrition data found')
-    my_insert_stmt = """insert into smoothies.public.orders(ingredients,name_on_order) 
-                        values('
-                            """ + ingredients_string +""",
-                            """ + name_on_order +"""
-                            ')
+    my_insert_stmt = """
+                        insert into smoothies.public.orders(ingredients,name_on_order) 
+                        values('""" + ingredients_string +"""','""" + name_on_order +"""')
                      """
 time_to_insert = st.button('Submit Order')
 if time_to_insert:
