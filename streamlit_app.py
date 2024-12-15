@@ -1,6 +1,7 @@
 # Import python packages
 # Import python packages
 import streamlit as st
+from snowflake.snowpark.functions import col
 import pandas as pd
 import requests
 import urllib.parse
@@ -13,6 +14,8 @@ st.write(
     )
 name_on_order = st.text_input('Name on Smoothie:')
 st.write('The name on your Smoothie will be:',name_on_order)
+cnx = st.connection('snowflake')
+session = cnx.session()
 webpage = 'https://my.smoothiefroot.com/api/fruit/all'
 data = pd.read_json(webpage)
 ingredients_list = st.multiselect('Choose up to 5 ingrdients:', data['name'], max_selections = 5)
@@ -38,8 +41,11 @@ if ingredients_list: #is not null:
                 st.dataframe(transposed_df,width=w,hide_index=True)
         else:
             st.write('No nutrition data found')
+    my_insert_stmt = """insert into smoothies.public.orders(ingredients) 
+                            values('""" + ingredients_string +""",""" + name_on_order +"""')"""
 time_to_insert = st.button('Submit Order')
 if time_to_insert:
+    session.sql(my_insert_stmt).collect()
     st.success('Your Smoothie is ordered, '+ name_on_order + '!', icon='✅')
 
 
